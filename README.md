@@ -11,14 +11,14 @@ Extract the JnicRunner.7z file into a folder and execute the start.bat file. Now
 
 Now you can switch between "JnicRunner", "Settings" and "Arguments".
 
-###JnicRunner
+### JnicRunner
 ``Input: The file to be obfuscated``
 <br><br>
 ``Output: The output file``
 <br><br>
 ``Config: The Config file that is optimised for your programme``
 
-###Settings
+### Settings
 ``use JnicHelper: If you have used JnicHelper in your jar file, 
 JnicRunner can generate the config for you and also save it in your config folder.``
 <br><br>
@@ -26,7 +26,7 @@ JnicRunner can generate the config for you and also save it in your config folde
 <br><br>
 ``Autoscroll: Do you want the console to scroll down automatically?``
 
-###Arguments
+### Arguments
 ``Jnic Argumntes: Here you can change the Jnic Command``
 <br><br>
 ``JnicHelper Arguments: Here you can change the JnicHelper Command``
