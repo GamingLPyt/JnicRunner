@@ -80,6 +80,11 @@
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
             </Label>
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="221.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/logo.png" />
+               </image>
+            </ImageView>
          </children></Pane>
       <Pane fx:id="settingsPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;" visible="false">
          <children>
@@ -102,6 +107,12 @@
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
             </CheckBox>
+            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="221.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/logo.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Pane fx:id="argumentsPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;" visible="false">
@@ -118,6 +129,11 @@
                </font>
             </Label>
             <TextField fx:id="jnicHelperTextField" layoutX="25.0" layoutY="188.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="221.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/logo.png" />
+               </image>
+            </ImageView>
             <Label layoutX="36.0" layoutY="168.0" text="JnicHelper Arguments" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="12.0" />
