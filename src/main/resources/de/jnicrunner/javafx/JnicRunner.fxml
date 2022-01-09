@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="405.0" prefWidth="262.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.jnicrunner.controller.JnicController">
+   <children>
+      <ImageView fx:id="selectedMover" fitHeight="32.0" fitWidth="32.0" layoutX="18.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../icons/arrow.png" />
+         </image>
+      </ImageView>
+      <Pane prefHeight="74.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;">
+         <children>
+            <Button fx:id="exitButton" layoutX="230.0" layoutY="5.0" mnemonicParsing="false" onAction="#onButtonClick" style="-fx-background-color: #363636; -fx-border-color: white; -fx-border-radius: 8; -fx-background-radius: 8;" text="X" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Button>
+            <ImageView fx:id="arguments" fitHeight="64.0" fitWidth="64.0" layoutX="165.0" layoutY="5.0" onMouseClicked="#onMouseClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/arguments.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="settings" fitHeight="64.0" fitWidth="64.0" layoutX="85.0" layoutY="5.0" onMouseClicked="#onMouseClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/settings.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="jnicRunner" fitHeight="64.0" fitWidth="64.0" layoutX="10.0" onMouseClicked="#onMouseClick" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../icons/process.png" />
+               </image>
+            </ImageView>
+         </children></Pane>
+      <Pane fx:id="jnicRunnerPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;">
+         <children>
+            <TextField fx:id="inputTextField" layoutX="14.0" layoutY="70.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <Label layoutX="74.0" layoutY="7.0" text="JnicRunner" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="24.0" />
+               </font>
+            </Label>
+            <Button fx:id="inputChoose" layoutX="192.0" layoutY="72.0" mnemonicParsing="false" onAction="#onButtonClick" style="-fx-background-color: #363636; -fx-border-color: white; -fx-background-radius: 10; -fx-border-radius: 10;" text="Choose" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="24.0" layoutY="50.0" text="Input" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="outputTextField" layoutX="14.0" layoutY="132.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <Button fx:id="outputChoose" layoutX="192.0" layoutY="134.0" mnemonicParsing="false" onAction="#onButtonClick" style="-fx-background-color: #363636; -fx-border-color: white; -fx-background-radius: 10; -fx-border-radius: 10;" text="Choose" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Button>
+            <Label layoutX="24.0" layoutY="112.0" text="Output" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+            <Button fx:id="process" layoutX="24.0" layoutY="264.0" mnemonicParsing="false" onAction="#onButtonClick" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-background-radius: 10; -fx-border-radius: 10;" text="Process" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Button>
+            <Button fx:id="configChoose" layoutX="192.0" layoutY="194.0" mnemonicParsing="false" onAction="#onButtonClick" style="-fx-background-color: #363636; -fx-border-color: white; -fx-background-radius: 10; -fx-border-radius: 10;" text="Choose" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Button>
+            <TextField fx:id="configTextField" layoutX="14.0" layoutY="194.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <Label layoutX="25.0" layoutY="174.0" text="Config" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+         </children></Pane>
+      <Pane fx:id="settingsPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;" visible="false">
+         <children>
+            <Label layoutX="89.0" layoutY="7.0" text="Settings" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="24.0" />
+               </font></Label>
+            <CheckBox fx:id="isJnicHelper" layoutX="34.0" layoutY="65.0" mnemonicParsing="false" onAction="#onButtonClick" stylesheets="@../css/CheckBox.css" text="use JnicHelper" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="autoScroll" layoutX="34.0" layoutY="109.0" mnemonicParsing="false" stylesheets="@../css/CheckBox.css" text="Autoscroll (Console)" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </CheckBox>
+         </children>
+      </Pane>
+      <Pane fx:id="argumentsPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;" visible="false">
+         <children>
+            <Label layoutX="75.0" layoutY="7.0" text="Arguments" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="jnicArgsTextField" layoutX="25.0" layoutY="106.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <Label layoutX="36.0" layoutY="84.0" text="Jnic Arguments" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="jnicHelperTextField" layoutX="25.0" layoutY="188.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <Label layoutX="36.0" layoutY="168.0" text="JnicHelper Arguments" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+   </children>
+</Pane>
