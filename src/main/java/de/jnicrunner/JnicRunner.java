@@ -14,6 +14,7 @@ public class JnicRunner extends Application {
     private static JnicRunner instance;
 
     private Stage stage;
+    private Stage consoleStage;
     private double xOffset, yOffset;
     private double xOffsetConsole, yOffsetConsole;
 
@@ -74,10 +75,16 @@ public class JnicRunner extends Application {
         consoleStage.setX(stage.getX() + 280);
         consoleStage.setY(stage.getY());
         consoleStage.show();
+        this.consoleStage = consoleStage;
+
     }
 
     public Stage getStage() {
         return stage;
+    }
+
+    public Stage getConsoleStage() {
+        return consoleStage;
     }
 
     public static JnicRunner getInstance() {

@@ -32,7 +32,7 @@ public class JnicController {
     @FXML
     private TextField inputTextField, outputTextField, configTextField, jnicArgsTextField, jnicHelperTextField;
     @FXML
-    private CheckBox isJnicHelper, autoScroll;
+    private CheckBox isJnicHelper, console, autoScroll;
 
     @FXML
     public void initialize() {
@@ -157,6 +157,23 @@ public class JnicController {
                     } else {
                         this.jnicHelperTextField.setDisable(true);
                     }
+
+                    break buttons;
+                }
+            }
+
+            isConsole:
+            {
+                if (event.getSource() == this.console) {
+                    if(this.console.isSelected()) {
+                        this.jnicRunner_.getConsoleStage().show();
+                        this.autoScroll.setDisable(false);
+                    } else {
+                        this.jnicRunner_.getConsoleStage().hide();
+                        this.autoScroll.setDisable(true);
+                    }
+
+                    break buttons;
                 }
             }
 
@@ -210,6 +227,8 @@ public class JnicController {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
+                    break buttons;
                 }
             }
         }

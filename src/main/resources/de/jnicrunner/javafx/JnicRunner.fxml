@@ -92,7 +92,12 @@
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
             </CheckBox>
-            <CheckBox fx:id="autoScroll" layoutX="34.0" layoutY="109.0" mnemonicParsing="false" stylesheets="@../css/CheckBox.css" text="Autoscroll (Console)" textFill="WHITE">
+            <CheckBox fx:id="autoScroll" layoutX="55.0" layoutY="137.0" mnemonicParsing="false" onAction="#onButtonClick" selected="true" stylesheets="@../css/CheckBox.css" text="Autoscroll" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </CheckBox>
+            <CheckBox fx:id="console" layoutX="34.0" layoutY="110.0" mnemonicParsing="false" onAction="#onButtonClick" selected="true" stylesheets="@../css/CheckBox.css" text="Console" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
