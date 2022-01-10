@@ -12,9 +12,13 @@ public class JnicProcess {
     private final JnicController jnicController;
     private final ConsoleController consoleController;
     private Process process;
+    private final boolean writeToConsole;
 
-    public JnicProcess(String args, JnicController jnicController) {
+    private String consoleOutPut;
+
+    public JnicProcess(String args, boolean writeToConsole, JnicController jnicController) {
         this.args = args;
+        this.writeToConsole = writeToConsole;
         this.jnicController = jnicController;
         this.consoleController = this.jnicController.getConsoleController();
     }
@@ -22,21 +26,33 @@ public class JnicProcess {
     public void exec() throws Exception {
         this.process = Runtime.getRuntime().exec(this.args.split(" "));
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(this.process.getInputStream()));
-        BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        BufferedReader errorReader = new BufferedReader(new InputStreamReader(this.process.getErrorStream()));
         String line;
 
         while ((line = bufferedReader.readLine()) != null) {
-            this.consoleController.setText(line);
-            this.jnicController.autoScroll();
+            this.consoleOutPut = this.consoleOutPut == null ? line : this.consoleOutPut + "\n" + line;
+
+            if (this.writeToConsole) {
+                this.consoleController.setText(line);
+                this.jnicController.autoScroll();
+            }
         }
 
         while ((line = errorReader.readLine()) != null) {
-            this.consoleController.setText(line);
-            this.jnicController.autoScroll();
+            this.consoleOutPut = this.consoleOutPut == null ? line : this.consoleOutPut + "\n" + line;
+
+            if (this.writeToConsole) {
+                this.consoleController.setText(line);
+                this.jnicController.autoScroll();
+            }
         }
     }
 
-    public boolean isReady() throws Exception {
-        return this.process.waitFor() == 0;
+    public String getConsoleOutPut() {
+        return consoleOutPut;
+    }
+
+    public void isReady() throws Exception {
+        this.process.waitFor();
     }
 }

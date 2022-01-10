@@ -2,16 +2,24 @@ package de.jnicrunner.controller;
 
 import de.jnicrunner.JnicRunner;
 import de.jnicrunner.util.JnicProcess;
+import de.jnicrunner.util.Replacer;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.File;
@@ -22,6 +30,11 @@ public class JnicController {
     private final JnicRunner jnicRunner_ = JnicRunner.getInstance();
     private ConsoleController consoleController;
 
+    private Parent activation = null;
+    private Stage activationStage = new Stage();
+    private double xOffset, yOffset;
+    private boolean firstUse;
+
     @FXML
     private ImageView jnicRunner, settings, arguments, selectedMover;
     @FXML
@@ -29,7 +42,7 @@ public class JnicController {
     @FXML
     private Button exitButton, inputChoose, outputChoose, configChoose, process;
     @FXML
-    private TextField inputTextField, outputTextField, configTextField, jnicArgsTextField, jnicHelperTextField;
+    private TextField inputTextField, outputTextField, configTextField, jnicArgsTextField, jnicHelperTextField, javaPathTextField, jnicPathTextField;
     @FXML
     private CheckBox isJnicHelper, console, autoScroll;
 
@@ -37,8 +50,10 @@ public class JnicController {
     public void initialize() {
         jnicController = this;
 
-        this.jnicArgsTextField.setText("java -jar jnic.jar %input_file% %output_file% %config_file% -debug");
-        this.jnicHelperTextField.setText("java -jar JnicHelper.jar %input_file% -s");
+        this.javaPathTextField.setText("./libs/openjdk-16.0.1/bin/javaw.exe");
+        this.jnicPathTextField.setText("./libs/jnic.jar");
+        this.jnicArgsTextField.setText("%java_path% -jar %jnic_path% %input_file% %output_file% %config_file% -debug");
+        this.jnicHelperTextField.setText("%java_path% -jar ./libs/JnicHelper.jar %input_file% %output_file% -s");
 
         this.jnicHelperTextField.setDisable(true);
     }
@@ -180,32 +195,61 @@ public class JnicController {
             {
                 if (event.getSource() == this.process) {
                     try {
+
                         String args;
                         JnicProcess jnicProcess;
 
+                        {
+                            if (!this.firstUse) {
+                                jnicProcess = new JnicProcess(new Replacer("%java_path% -jar %jnic_path%", this).replace(), false, this);
+                                jnicProcess.exec();
+                                jnicProcess.isReady();
+
+                                if (jnicProcess.getConsoleOutPut().contains("Could not open file jnic.licence")) {
+                                    this.activation = FXMLLoader.load(JnicRunner.class.getResource("javafx/ActivateJnic.fxml"));
+
+                                    this.activationStage.getIcons().add(new Image(JnicRunner.class.getResourceAsStream("icons/logo.png")));
+                                    this.activationStage.setTitle("JnicRunner | Activation");
+                                    this.activationStage.initStyle(StageStyle.TRANSPARENT);
+
+                                    this.activation.setOnMousePressed(mouseEvent -> {
+                                        this.xOffset = mouseEvent.getSceneX();
+                                        this.yOffset = mouseEvent.getSceneY();
+                                    });
+
+                                    this.activation.setOnMouseDragged(mouseEvent -> {
+                                        this.activationStage.setX(mouseEvent.getScreenX() - this.xOffset);
+                                        this.activationStage.setY(mouseEvent.getScreenY() - this.yOffset);
+                                    });
+
+                                    Scene scene = new Scene(this.activation);
+
+                                    scene.setFill(Color.TRANSPARENT);
+                                    this.activationStage.setScene(scene);
+                                    this.activationStage.setY(this.jnicRunner_.getStage().getY() + 150);
+                                    this.activationStage.setX(this.jnicRunner_.getStage().getX() - 320);
+                                    this.activationStage.show();
+
+                                    break buttons;
+                                }
+                            }
+
+                            this.firstUse = true;
+                        }
+
                         if (this.isJnicHelper.isSelected()) {
-                            args = this.jnicHelperTextField.getText()
-                                    .replace("%input_file%", this.inputTextField.getText())
-                                    .replace("%output_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
-                            jnicProcess = new JnicProcess(args, this);
+                            args = this.jnicHelperTextField.getText().replace("%output_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
+                            jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
                             jnicProcess.exec();
 
-                            if (jnicProcess.isReady()) {
-                                args = this.jnicArgsTextField.getText()
-                                        .replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"))
-                                        .replace("%output_file%", this.outputTextField.getText())
-                                        .replace("%config_file%", this.configTextField.getText());
-
-                                jnicProcess = new JnicProcess(args, this);
-                                jnicProcess.exec();
-                            }
-                        } else {
+                            jnicProcess.isReady();
                             args = this.jnicArgsTextField.getText()
-                                    .replace("%input_file%", this.inputTextField.getText())
-                                    .replace("%output_file%", this.outputTextField.getText())
-                                    .replace("%config_file%", this.configTextField.getText());
+                                    .replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
 
-                            jnicProcess = new JnicProcess(args, this);
+                            jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
+                            jnicProcess.exec();
+                        } else {
+                            jnicProcess = new JnicProcess(new Replacer(this.jnicArgsTextField.getText(), this).replace(), true, this);
                             jnicProcess.exec();
                         }
                     } catch (Exception e) {
@@ -216,6 +260,7 @@ public class JnicController {
                 }
             }
         }
+
     }
 
     public void autoScroll() {
@@ -226,6 +271,30 @@ public class JnicController {
 
     public void setConsoleController(ConsoleController consoleController) {
         this.consoleController = consoleController;
+    }
+
+    public TextField getInputTextField() {
+        return inputTextField;
+    }
+
+    public TextField getOutputTextField() {
+        return outputTextField;
+    }
+
+    public TextField getConfigTextField() {
+        return configTextField;
+    }
+
+    public TextField getJavaPathTextField() {
+        return javaPathTextField;
+    }
+
+    public TextField getJnicPathTextField() {
+        return jnicPathTextField;
+    }
+
+    public Stage getActivationStage() {
+        return activationStage;
     }
 
     public ConsoleController getConsoleController() {

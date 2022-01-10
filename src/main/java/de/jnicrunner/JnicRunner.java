@@ -47,7 +47,6 @@ public class JnicRunner extends Application {
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
         stage.show();
-        stage.setX(stage.getX() - 131);
         this.stage = stage;
 
 
@@ -76,7 +75,6 @@ public class JnicRunner extends Application {
         consoleStage.setY(stage.getY());
         consoleStage.show();
         this.consoleStage = consoleStage;
-
     }
 
     public Stage getStage() {

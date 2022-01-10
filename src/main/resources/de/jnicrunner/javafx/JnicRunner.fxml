@@ -35,9 +35,12 @@
                </image>
             </ImageView>
          </children></Pane>
-      <Pane fx:id="jnicRunnerPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;" visible="false">
+      <Pane fx:id="jnicRunnerPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;">
          <children>
-            <TextField fx:id="inputTextField" layoutX="14.0" layoutY="70.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <TextField fx:id="inputTextField" layoutX="14.0" layoutY="70.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font></TextField>
             <Label layoutX="74.0" layoutY="7.0" text="JnicRunner" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="24.0" />
@@ -53,7 +56,10 @@
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
             </Label>
-            <TextField fx:id="outputTextField" layoutX="14.0" layoutY="132.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <TextField fx:id="outputTextField" layoutX="14.0" layoutY="132.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font></TextField>
             <Button fx:id="outputChoose" layoutX="192.0" layoutY="134.0" mnemonicParsing="false" onAction="#onButtonClick" style="-fx-background-color: #363636; -fx-border-color: white; -fx-background-radius: 10; -fx-border-radius: 10;" text="Choose" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="12.0" />
@@ -74,7 +80,10 @@
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
             </Button>
-            <TextField fx:id="configTextField" layoutX="14.0" layoutY="194.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <TextField fx:id="configTextField" layoutX="14.0" layoutY="194.0" prefHeight="25.0" prefWidth="168.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font></TextField>
             <Label layoutX="25.0" layoutY="174.0" text="Config" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="12.0" />
@@ -86,7 +95,7 @@
                </image>
             </ImageView>
          </children></Pane>
-      <Pane fx:id="settingsPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;">
+      <Pane fx:id="settingsPane" layoutY="90.0" prefHeight="312.0" prefWidth="262.0" style="-fx-background-color: #292929; -fx-background-radius: 15; -fx-border-color: white; -fx-border-radius: 15;" visible="false">
          <children>
             <Label layoutX="89.0" layoutY="7.0" text="Settings" textFill="WHITE">
                <font>
@@ -121,19 +130,45 @@
                   <Font name="Franklin Gothic Medium" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="jnicArgsTextField" layoutX="25.0" layoutY="106.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
-            <Label layoutX="36.0" layoutY="84.0" text="Jnic Arguments" textFill="WHITE">
+            <TextField fx:id="jnicArgsTextField" layoutX="25.0" layoutY="192.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font></TextField>
+            <Label layoutX="36.0" layoutY="172.0" text="Jnic Arguments" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
             </Label>
-            <TextField fx:id="jnicHelperTextField" layoutX="25.0" layoutY="188.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;" />
+            <TextField fx:id="jnicHelperTextField" layoutX="25.0" layoutY="254.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font></TextField>
             <ImageView fitHeight="32.0" fitWidth="32.0" layoutX="221.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/logo.png" />
                </image>
             </ImageView>
-            <Label layoutX="36.0" layoutY="168.0" text="JnicHelper Arguments" textFill="WHITE">
+            <Label layoutX="36.0" layoutY="234.0" text="JnicHelper Arguments" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+            <TextField fx:id="javaPathTextField" layoutX="25.0" layoutY="68.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="jnicPathTextField" layoutX="25.0" layoutY="130.0" prefHeight="25.0" prefWidth="213.0" style="-fx-background-color: #363636; -fx-border-color: white; -fx-text-fill: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </TextField>
+            <Label layoutX="36.0" layoutY="48.0" text="Java Path" textFill="WHITE">
+               <font>
+                  <Font name="Franklin Gothic Medium" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="36.0" layoutY="110.0" text="Jnic Path" textFill="WHITE">
                <font>
                   <Font name="Franklin Gothic Medium" size="12.0" />
                </font>
