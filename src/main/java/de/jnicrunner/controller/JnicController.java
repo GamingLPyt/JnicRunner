@@ -1,6 +1,7 @@
 package de.jnicrunner.controller;
 
 import de.jnicrunner.JnicRunner;
+import de.jnicrunner.util.JnicProcess;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,9 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 
 public class JnicController {
 
@@ -165,7 +164,7 @@ public class JnicController {
             isConsole:
             {
                 if (event.getSource() == this.console) {
-                    if(this.console.isSelected()) {
+                    if (this.console.isSelected()) {
                         this.jnicRunner_.getConsoleStage().show();
                         this.autoScroll.setDisable(false);
                     } else {
@@ -180,50 +179,35 @@ public class JnicController {
             process:
             {
                 if (event.getSource() == this.process) {
-                    Runtime runtime = Runtime.getRuntime();
-
-                    String args;
-                    Process process;
-                    BufferedReader inputStream;
-                    BufferedReader stdError;
-                    String line;
-
                     try {
+                        String args;
+                        JnicProcess jnicProcess;
+
                         if (this.isJnicHelper.isSelected()) {
-                            args = this.jnicHelperTextField.getText().replace("%input_file%", this.inputTextField.getText());
-                            process = runtime.exec(args.split(" "));
-                            inputStream = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                            stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+                            args = this.jnicHelperTextField.getText()
+                                    .replace("%input_file%", this.inputTextField.getText())
+                                    .replace("%output_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
+                            jnicProcess = new JnicProcess(args, this);
+                            jnicProcess.exec();
 
-                            while ((line = inputStream.readLine()) != null) {
-                                this.consoleController.setText(line);
-                                this.autoScroll();
+                            if (jnicProcess.isReady()) {
+                                args = this.jnicArgsTextField.getText()
+                                        .replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"))
+                                        .replace("%output_file%", this.outputTextField.getText())
+                                        .replace("%config_file%", this.configTextField.getText());
+
+                                jnicProcess = new JnicProcess(args, this);
+                                jnicProcess.exec();
                             }
+                        } else {
+                            args = this.jnicArgsTextField.getText()
+                                    .replace("%input_file%", this.inputTextField.getText())
+                                    .replace("%output_file%", this.outputTextField.getText())
+                                    .replace("%config_file%", this.configTextField.getText());
 
-                            while ((line = stdError.readLine()) != null) {
-                                this.consoleController.setText(line);
-                                this.autoScroll();
-                            }
+                            jnicProcess = new JnicProcess(args, this);
+                            jnicProcess.exec();
                         }
-
-                        args = this.jnicArgsTextField.getText()
-                                .replace("%input_file%", this.inputTextField.getText())
-                                .replace("%output_file%", this.outputTextField.getText())
-                                .replace("%config_file%", this.configTextField.getText());
-                        process = runtime.exec(args.split(" "));
-                        inputStream = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        stdError = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-                        while ((line = inputStream.readLine()) != null) {
-                            this.consoleController.setText(line);
-                            this.autoScroll();
-                        }
-
-                        while ((line = stdError.readLine()) != null) {
-                            this.consoleController.setText(line);
-                            this.autoScroll();
-                        }
-
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -242,6 +226,10 @@ public class JnicController {
 
     public void setConsoleController(ConsoleController consoleController) {
         this.consoleController = consoleController;
+    }
+
+    public ConsoleController getConsoleController() {
+        return consoleController;
     }
 
     public static JnicController getJnicController() {
