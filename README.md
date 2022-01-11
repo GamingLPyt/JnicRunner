@@ -7,7 +7,7 @@ Extract the JnicRunner.7z file into a folder and execute the start.bat file. Now
 <br>
 <br>
 <br>
-![screenshot](https://www.waveguard.dev/jnic/images/JnicRunner.pn)
+![screenshot](https://www.waveguard.dev/jnic/images/JnicRunner.png)
 
 Now you can switch between "JnicRunner", "Settings" and "Arguments".
 
