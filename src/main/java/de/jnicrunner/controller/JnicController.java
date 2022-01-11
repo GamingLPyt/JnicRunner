@@ -243,8 +243,7 @@ public class JnicController {
                             jnicProcess.exec();
 
                             jnicProcess.isReady();
-                            args = this.jnicArgsTextField.getText()
-                                    .replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
+                            args = this.jnicArgsTextField.getText().replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
 
                             jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
                             jnicProcess.exec();
