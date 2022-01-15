@@ -1,22 +1,16 @@
 package de.jnicrunner;
 
+import de.jnicrunner.util.FxmlLoader;
+import de.jnicrunner.util.enums.StageID;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
+import java.util.ArrayList;
 
 public class JnicRunner extends Application {
 
     private static JnicRunner instance;
-
-    private Stage stage;
-    private Stage consoleStage;
-    private double xOffset, yOffset;
-    private double xOffsetConsole, yOffsetConsole;
+    private ArrayList<FxmlLoader> fxmlLoader = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -26,63 +20,15 @@ public class JnicRunner extends Application {
     public void start(Stage stage) throws Exception {
         instance = this;
 
-        Parent parent = FXMLLoader.load(this.getClass().getResource("javafx/JnicRunner.fxml"));
-
-        stage.getIcons().add(new Image(this.getClass().getResourceAsStream("icons/logo.png")));
-        stage.setTitle("JnicRunner | Developed By GamingLPyt");
-        stage.initStyle(StageStyle.TRANSPARENT);
-
-        parent.setOnMousePressed(mouseEvent -> {
-            this.xOffset = mouseEvent.getSceneX();
-            this.yOffset = mouseEvent.getSceneY();
-        });
-
-        parent.setOnMouseDragged(mouseEvent -> {
-            stage.setX(mouseEvent.getScreenX() - this.xOffset);
-            stage.setY(mouseEvent.getScreenY() - this.yOffset);
-        });
-
-        Scene scene = new Scene(parent);
-
-        scene.setFill(Color.TRANSPARENT);
-        stage.setScene(scene);
-        stage.show();
-        this.stage = stage;
-
-
-
-        Parent console = FXMLLoader.load(this.getClass().getResource("javafx/Console.fxml"));
-        Stage consoleStage = new Stage();
-        consoleStage.getIcons().add(new Image(this.getClass().getResourceAsStream("icons/logo.png")));
-        consoleStage.setTitle("JnicRunner | Console");
-
-        console.setOnMousePressed(mouseEvent -> {
-            this.xOffsetConsole = mouseEvent.getSceneX();
-            this.yOffsetConsole = mouseEvent.getSceneY();
-        });
-
-        console.setOnMouseDragged(mouseEvent -> {
-            consoleStage.setX(mouseEvent.getScreenX() - this.xOffsetConsole);
-            consoleStage.setY(mouseEvent.getScreenY() - this.yOffsetConsole);
-        });
-
-        Scene consoleScene = new Scene(console);
-
-        consoleStage.initStyle(StageStyle.TRANSPARENT);
-        consoleScene.setFill(Color.TRANSPARENT);
-        consoleStage.setScene(consoleScene);
-        consoleStage.setX(stage.getX() + 280);
-        consoleStage.setY(stage.getY());
-        consoleStage.show();
-        this.consoleStage = consoleStage;
+        FxmlLoader fxmlLoader;
+        this.fxmlLoader.add(fxmlLoader = new FxmlLoader(StageID.JNIC_RUNNER.getId(), StageID.JNIC_RUNNER.getFxml(), StageID.JNIC_RUNNER.getTitle(), null, StageID.JNIC_RUNNER.getXPos(), StageID.JNIC_RUNNER.getYPos()).load(true));
+        this.fxmlLoader.add(new FxmlLoader(StageID.JNIC_CONSOLE.getId(), StageID.JNIC_CONSOLE.getFxml(), StageID.JNIC_CONSOLE.getTitle(), fxmlLoader.getStage(), StageID.JNIC_CONSOLE.getXPos(), StageID.JNIC_CONSOLE.getYPos()).load(true));
+        this.fxmlLoader.add(new FxmlLoader(StageID.JNIC_ACTIVATION.getId(), StageID.JNIC_ACTIVATION.getFxml(), StageID.JNIC_ACTIVATION.getTitle(), fxmlLoader.getStage(), StageID.JNIC_ACTIVATION.getXPos(), StageID.JNIC_ACTIVATION.getYPos()).load(false));
+        this.fxmlLoader.add(new FxmlLoader(StageID.JNIC_ERROR.getId(), StageID.JNIC_ERROR.getFxml(), StageID.JNIC_ERROR.getTitle(), fxmlLoader.getStage(), StageID.JNIC_ERROR.getXPos(), StageID.JNIC_ERROR.getYPos()).load(false));
     }
 
-    public Stage getStage() {
-        return stage;
-    }
-
-    public Stage getConsoleStage() {
-        return consoleStage;
+    public ArrayList<FxmlLoader> getFxmlLoader() {
+        return fxmlLoader;
     }
 
     public static JnicRunner getInstance() {

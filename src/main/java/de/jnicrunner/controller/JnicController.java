@@ -1,38 +1,36 @@
 package de.jnicrunner.controller;
 
 import de.jnicrunner.JnicRunner;
+import de.jnicrunner.util.FxmlLoader;
 import de.jnicrunner.util.JnicProcess;
 import de.jnicrunner.util.Replacer;
+import de.jnicrunner.util.enums.StageID;
 import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class JnicController {
 
     private static JnicController jnicController;
-    private final JnicRunner jnicRunner_ = JnicRunner.getInstance();
-    private ConsoleController consoleController;
 
-    private Parent activation = null;
-    private Stage activationStage = new Stage();
-    private double xOffset, yOffset;
+    private final JnicRunner jnicRunner_ = JnicRunner.getInstance();
+    private final ArrayList<FxmlLoader> fxmlLoader = this.jnicRunner_.getFxmlLoader();
+    private ConsoleController consoleController;
+    private ErrorController errorController;
+
     private boolean firstUse;
 
     @FXML
@@ -53,7 +51,7 @@ public class JnicController {
         this.javaPathTextField.setText("./libs/openjdk-16.0.1/bin/javaw.exe");
         this.jnicPathTextField.setText("./libs/jnic.jar");
         this.jnicArgsTextField.setText("%java_path% -jar %jnic_path% %input_file% %output_file% %config_file% -debug");
-        this.jnicHelperTextField.setText("%java_path% -jar ./libs/JnicHelper.jar %input_file% %output_file% -s");
+        this.jnicHelperTextField.setText("%java_path% -jar ./libs/JnicHelper.jar %input_file% %config_file% -s -m");
 
         this.jnicHelperTextField.setDisable(true);
     }
@@ -117,7 +115,7 @@ public class JnicController {
 
                     fileChooser.getExtensionFilters().add(extensionFilter);
                     fileChooser.setTitle("Choose your input file");
-                    File file = fileChooser.showOpenDialog(this.jnicRunner_.getStage());
+                    File file = fileChooser.showOpenDialog(this.fxmlLoader.get(StageID.JNIC_RUNNER.getId()).getStage());
 
                     if (file != null) {
                         this.inputTextField.setText(file.getAbsolutePath());
@@ -135,7 +133,7 @@ public class JnicController {
 
                     fileChooser.getExtensionFilters().add(extensionFilter);
                     fileChooser.setTitle("Choose your output file");
-                    File file = fileChooser.showOpenDialog(this.jnicRunner_.getStage());
+                    File file = fileChooser.showOpenDialog(this.fxmlLoader.get(StageID.JNIC_RUNNER.getId()).getStage());
 
                     if (file != null) {
                         this.outputTextField.setText(file.getAbsolutePath());
@@ -148,12 +146,20 @@ public class JnicController {
             configChoose:
             {
                 if (event.getSource() == this.configChoose) {
-                    FileChooser fileChooser = new FileChooser();
-                    FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Xml Files (*.xml)", "*.xml");
+                    File file;
 
-                    fileChooser.getExtensionFilters().add(extensionFilter);
-                    fileChooser.setTitle("Choose your config file");
-                    File file = fileChooser.showOpenDialog(this.jnicRunner_.getStage());
+                    if (this.isJnicHelper.isSelected()) {
+                        DirectoryChooser directoryChooser = new DirectoryChooser();
+                        directoryChooser.setTitle("Choose your config folder");
+                        file = directoryChooser.showDialog(this.fxmlLoader.get(StageID.JNIC_RUNNER.getId()).getStage());
+                    } else {
+                        FileChooser fileChooser = new FileChooser();
+                        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("Xml Files (*.xml)", "*.xml");
+
+                        fileChooser.getExtensionFilters().add(extensionFilter);
+                        fileChooser.setTitle("Choose your config file");
+                        file = fileChooser.showOpenDialog(this.fxmlLoader.get(StageID.JNIC_RUNNER.getId()).getStage());
+                    }
 
                     if (file != null) {
                         this.configTextField.setText(file.getAbsolutePath());
@@ -180,10 +186,10 @@ public class JnicController {
             {
                 if (event.getSource() == this.console) {
                     if (this.console.isSelected()) {
-                        this.jnicRunner_.getConsoleStage().show();
+                        this.fxmlLoader.get(StageID.JNIC_CONSOLE.getId()).getStage().show();
                         this.autoScroll.setDisable(false);
                     } else {
-                        this.jnicRunner_.getConsoleStage().hide();
+                        this.fxmlLoader.get(StageID.JNIC_CONSOLE.getId()).getStage().hide();
                         this.autoScroll.setDisable(true);
                     }
 
@@ -196,60 +202,50 @@ public class JnicController {
                 if (event.getSource() == this.process) {
                     try {
 
-                        String args;
-                        JnicProcess jnicProcess;
+                        if (!(this.inputTextField.getText().isEmpty() || this.outputTextField.getText().isEmpty() || this.configTextField.getText().isEmpty())) {
+                            String args;
+                            JnicProcess jnicProcess;
 
-                        {
-                            if (!this.firstUse) {
-                                jnicProcess = new JnicProcess(new Replacer("%java_path% -jar %jnic_path%", this).replace(), false, this);
-                                jnicProcess.exec();
-                                jnicProcess.isReady();
+                            /*{
+                                if (!this.firstUse) {
+                                    jnicProcess = new JnicProcess(new Replacer("%java_path% -jar %jnic_path%", this).replace(), false, this);
+                                    jnicProcess.exec();
+                                    jnicProcess.isReady();
 
-                                if (jnicProcess.getConsoleOutPut().contains("Could not open file jnic.licence")) {
-                                    this.activation = FXMLLoader.load(JnicRunner.class.getResource("javafx/ActivateJnic.fxml"));
-
-                                    this.activationStage.getIcons().add(new Image(JnicRunner.class.getResourceAsStream("icons/logo.png")));
-                                    this.activationStage.setTitle("JnicRunner | Activation");
-                                    this.activationStage.initStyle(StageStyle.TRANSPARENT);
-
-                                    this.activation.setOnMousePressed(mouseEvent -> {
-                                        this.xOffset = mouseEvent.getSceneX();
-                                        this.yOffset = mouseEvent.getSceneY();
-                                    });
-
-                                    this.activation.setOnMouseDragged(mouseEvent -> {
-                                        this.activationStage.setX(mouseEvent.getScreenX() - this.xOffset);
-                                        this.activationStage.setY(mouseEvent.getScreenY() - this.yOffset);
-                                    });
-
-                                    Scene scene = new Scene(this.activation);
-
-                                    scene.setFill(Color.TRANSPARENT);
-                                    this.activationStage.setScene(scene);
-                                    this.activationStage.setY(this.jnicRunner_.getStage().getY() + 150);
-                                    this.activationStage.setX(this.jnicRunner_.getStage().getX() - 320);
-                                    this.activationStage.show();
-
-                                    break buttons;
+                                    if (jnicProcess.getConsoleOutPut().contains("Could not open file jnic.licence")) {
+                                        this.fxmlLoader.get(StageID.JNIC_ACTIVATION.getId()).getStage().show();
+                                        break buttons;
+                                    }
                                 }
+
+                                this.firstUse = true;
+                            }*/
+
+                            if (this.isJnicHelper.isSelected()) {
+                                if (new File(this.configTextField.getText()).isDirectory()) {
+                                    args = this.jnicHelperTextField.getText().replace("%output_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
+                                    jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
+                                    jnicProcess.exec();
+
+                                    jnicProcess.isReady();
+                                    args = this.jnicArgsTextField.getText().replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
+
+                                    jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
+                                    jnicProcess.exec();
+                                } else {
+                                    Stage stage = this.jnicRunner_.getFxmlLoader().get(StageID.JNIC_ERROR.getId()).getStage();
+                                    this.getErrorController().setError("You are using JnicHelper\nPlease set the Config-Path\nAs an Folder");
+                                    stage.show();
+                                }
+                            } else {
+                                jnicProcess = new JnicProcess(new Replacer(this.jnicArgsTextField.getText(), this).replace(), true, this);
+                                jnicProcess.exec();
                             }
-
-                            this.firstUse = true;
-                        }
-
-                        if (this.isJnicHelper.isSelected()) {
-                            args = this.jnicHelperTextField.getText().replace("%output_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
-                            jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
-                            jnicProcess.exec();
-
-                            jnicProcess.isReady();
-                            args = this.jnicArgsTextField.getText().replace("%input_file%", this.inputTextField.getText().replace(".jar", ".jnicHelper.jar"));
-
-                            jnicProcess = new JnicProcess(new Replacer(args, this).replace(), true, this);
-                            jnicProcess.exec();
                         } else {
-                            jnicProcess = new JnicProcess(new Replacer(this.jnicArgsTextField.getText(), this).replace(), true, this);
-                            jnicProcess.exec();
+                            Stage stage = this.jnicRunner_.getFxmlLoader().get(StageID.JNIC_ERROR.getId()).getStage();
+                            this.getErrorController().setError("Input-/Output- or Config-\nText-Field isn't set");
+                            stage.show();
+                            break buttons;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -272,6 +268,10 @@ public class JnicController {
         this.consoleController = consoleController;
     }
 
+    public void setErrorController(ErrorController errorController) {
+        this.errorController = errorController;
+    }
+
     public TextField getInputTextField() {
         return inputTextField;
     }
@@ -292,12 +292,16 @@ public class JnicController {
         return jnicPathTextField;
     }
 
-    public Stage getActivationStage() {
-        return activationStage;
+    public CheckBox getIsJnicHelper() {
+        return isJnicHelper;
     }
 
     public ConsoleController getConsoleController() {
         return consoleController;
+    }
+
+    public ErrorController getErrorController() {
+        return errorController;
     }
 
     public static JnicController getJnicController() {

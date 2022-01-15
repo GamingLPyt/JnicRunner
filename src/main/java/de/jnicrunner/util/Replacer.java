@@ -42,7 +42,7 @@ public class Replacer {
         JNIC_PATH("%jnic_path%", jnicController.getJnicPathTextField().getText()),
         INPUT_FILE("%input_file%", jnicController.getInputTextField().getText()),
         OUTPUT_FILE("%output_file%", jnicController.getOutputTextField().getText()),
-        CONFIG_FILE("%config_file%", jnicController.getConfigTextField().getText());
+        CONFIG_FILE("%config_file%", (jnicController.getConfigTextField().getText() + (jnicController.getIsJnicHelper().isSelected() ?  "/config.xml" : "")));
 
         private String placeholder;
         private String replace;

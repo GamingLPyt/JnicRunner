@@ -29,8 +29,4 @@ public class ConsoleController {
     public TextArea getConsole() {
         return console;
     }
-
-    public static ConsoleController getConsoleController() {
-        return consoleController;
-    }
 }
